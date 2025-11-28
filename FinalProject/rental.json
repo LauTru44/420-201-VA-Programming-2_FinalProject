@@ -1,0 +1,14 @@
+{
+  "members": [
+    {
+      "schoolName": "as",
+      "grade": 12,
+      "id_member": 32,
+      "name": "saa",
+      "email": "sda@da.com",
+      "type": "Student",
+      "movies": []
+    }
+  ],
+  "movies": []
+}
