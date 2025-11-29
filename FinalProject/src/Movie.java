@@ -3,7 +3,7 @@ public class Movie {
 	
 	int id_movie;
 	String title;
-	boolean available=true;
+	boolean available;
 	RentDate rentDate ;
 	RentDate returnDate ;
 	

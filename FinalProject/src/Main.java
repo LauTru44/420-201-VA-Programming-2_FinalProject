@@ -18,50 +18,52 @@ public class Main {
 
 		    boolean valid = false;
 
-		    while (!valid) {
+		    while (valid==false) {
 		        try {
 		            showMemberChoiceMenu();
 		            int memberChoice = in.nextInt();
-		            in.nextLine(); 
+		            in.nextLine(); // clean buffer
 
-		            
+		            // ----- MEMBER ID -----
 		            System.out.println("Enter the member's ID (2 digits):");
 		            int memberId = in.nextInt();
-		            in.nextLine();
+		            in.nextLine(); // clean buffer
 		            rental_system.ValidateId(memberId, "member");
 
-		           
+		            // ----- NAME -----
 		            System.out.println("Enter your name:");
-		            String name = in.next();
+		            String name = in.nextLine();
 		            rental_system.validateAlphabets(name);
 
-		            
+		            // ----- EMAIL -----
 		            System.out.println("Enter your email:");
 		            String email = in.next();
+		            in.nextLine(); // clean buffer after next()
 		            rental_system.validateEmail(email);
 
-		
 		            if (memberChoice == 1) {
-		                // STUDENT
+		                // ----- STUDENT -----
+
 		                System.out.println("Enter your school's name:");
-		                String schoolName = in.next();
+		                String schoolName = in.nextLine();
 		                rental_system.validateAlphabets(schoolName);
 
 		                System.out.println("Enter your grade:");
 		                int grade = in.nextInt();
-		                in.nextLine();
+		                in.nextLine(); // clean buffer
 		                rental_system.verifyGrade(grade);
 
 		                rental_system.newMember(new Student(memberId, name, email, schoolName, grade));
 		            }
 		            else if (memberChoice == 2) {
-		                // EXTERNAL MEMBER
+		                // ----- EXTERNAL MEMBER -----
+
 		                System.out.println("Enter your job's title:");
-		                String job = in.next();
+		                String job = in.nextLine();
 		                rental_system.validateAlphabets(job);
 
 		                System.out.println("Enter your organization's name:");
-		                String org = in.next();
+		                String org = in.nextLine();
 		                rental_system.validateAlphabets(org);
 
 		                rental_system.newMember(new External_Member(memberId, name, email, job, org));
@@ -72,45 +74,53 @@ public class Main {
 
 		            System.out.println("New member added and saved successfully!");
 		            valid = true; 
-		        }
-		        catch (InputMismatchException e) {
-		            System.out.println("Invalid input. Please enter the correct format.");
-		            in.nextLine(); 
-		            valid = false; 
-		        }
-		        catch (Exception e) {
-		            System.out.println(e.getMessage());
-		            in.nextLine();
-		            valid = false; 
-		        }
+		        	}
+			        catch (InputMismatchException e) {
+			            System.out.println("Invalid input. Please enter the correct format.");
+			            in.nextLine(); 
+			            valid = false; 
+			        }
+			        catch (Exception e) {
+			            System.out.println(e.getMessage());
+			            valid = false; 
+			        }
 		    }
-
-		    break;
+		    		break;
 				
 			case 2: int movieId =0;
-					boolean validIdMovie=false;
+					boolean validMovie=false;
 					
-					while (validIdMovie==false) {
+					while (validMovie==false) {
 						try { 
 							System.out.println("Enter the movies's id (2 digits):");
 							movieId = in.nextInt();
+							in.nextLine(); //Avoids the empty string left by nextInt								
 							rental_system.ValidateId(movieId,"movie");
-							validIdMovie=true;
+							
+							System.out.println("Enter the movie's name:");
+							String title = in.nextLine();
+							rental_system.validateEmptyString(title);
+							
+							rental_system.newMovie(new Movie(movieId,title,true));
+							
+							System.out.println("New movie added and saved successfully!");
+							validMovie=true;
 						}
+				        catch (InputMismatchException e) {
+				            System.out.println("Invalid input. Please enter the correct format.");
+				            in.nextLine(); 
+				            validMovie = false; 
+				        }
 						catch (Exception e) {
 							System.out.println(e.getMessage());
-							in.nextLine();
-						}
-					}
-					
-					System.out.println("Enter the movie's name:");
-					String title = in.next();
-					
-					rental_system.newMovie(new Movie(movieId,title,true));
-				break;
+							validMovie = false; 
+							}
+						}					
+					break;
 				
 			case 3: try {
 						rental_system.emptyLists();//checks if there are members or movies available
+						rental_system.possibilityOfRenting();
 						System.out.print("Enter the ID of the member renting the movie: ");
 						int memberRenting = in.nextInt();	
 						rental_system.checkIdMemberExistence(memberRenting);
@@ -128,11 +138,11 @@ public class Main {
 							System.out.println(e.getMessage());
 							in.nextLine();
 						}
-
-				break;
+					break;
 				
 			case 4: try {
 					rental_system.emptyLists(); //checks if there are members or movies available
+					rental_system.possibilityOfReturning();
 					System.out.print("Enter the ID of the member returning the movie: ");
 					int memberRenting = in.nextInt();	
 					rental_system.checkIdMemberExistence(memberRenting);
@@ -142,7 +152,7 @@ public class Main {
 					rental_system.checkMovieExistence(movieToReturn);
 					System.out.println("Enter the date when you're returning the movie (dd-mm-yyyy):");
 					String dateReturn = in.next();
-					System.out.println("The payable amount is "+rental_system.getRentDurationForMember(memberRenting, movieToReturn, dateReturn)+"$");
+					System.out.println("The payable amount is "+rental_system.returningMovie(memberRenting, movieToReturn, dateReturn)+"$");
 					}
 					catch (Exception e) {
 						System.out.println(e.getMessage());
